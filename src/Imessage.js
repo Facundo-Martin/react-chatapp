@@ -6,6 +6,7 @@ function Imessage() {
     <div className="imessage">
       {/* Sidebar */}
       <Sidebar />
+
       {/* Chat */}
     </div>
   );
