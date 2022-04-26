@@ -3,6 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import React from "react";
 import "./Sidebar.css";
+import SidebarChat from "./SidebarChat";
 
 function Sidebar() {
   return (
@@ -18,7 +19,9 @@ function Sidebar() {
           <RateReviewIcon />
         </IconButton>
       </div>
-      <div className="sidebar__chats"></div>
+      <div className="sidebar__chats">
+        <SidebarChat />
+      </div>
     </div>
   );
 }
