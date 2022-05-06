@@ -6,7 +6,7 @@ import { auth, provider } from "./firebase";
 
 function Login() {
   const googleHandler = async () => {
-    provider.setCustomParameters({ prompt: "select_account" });
+    // provider.setCustomParameters({ prompt: "select_account" });
     signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -14,7 +14,7 @@ function Login() {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        // redux action? --> dispatch({ type: SET_USER, user });
+        // ...
       })
       .catch((error) => {
         // Handle Errors here.
