@@ -2,6 +2,7 @@ import { IconButton } from "@mui/material";
 import MicNoneIcon from "@mui/icons-material/MicNone";
 import React, { useState } from "react";
 import "./Chat.css";
+import Message from "./Message";
 
 function Chat() {
   const [input, setInput] = useState("");
@@ -22,11 +23,7 @@ function Chat() {
       </div>
       {/* Chat messages */}
       <div className="chat__messages">
-        <h2>I am a message</h2>
-        <h2>I am a message</h2>
-        <h2>I am a message</h2>
-        <h2>I am a message</h2>
-        <h2>I am a message</h2>
+        <Message />
       </div>
       {/* Chat input */}
       <div className="chat__input">
