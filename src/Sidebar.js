@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import { Avatar, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -34,18 +34,21 @@ function Sidebar() {
   //     console.log("hi");
   //   });
   // }, []);
-  // Adding chats to our db
 
   // Adding a real-time listener to our database so when we make changes we retrieve the updated snapshot and re-render --> onSnapshot
-  onSnapshot(colRef, (snapshot) => {
-    setChats(
-      snapshot.docs.map((doc) => ({
-        data: doc.data(),
-        id: doc.id,
-      }))
-    );
-  });
+  // Re renders infinitely
+  useEffect(() => {
+    onSnapshot(colRef, (snapshot) => {
+      setChats(
+        snapshot.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }))
+      );
+    });
+  }, []);
 
+  // Adding chats to our db
   const addChat = () => {
     const chatName = prompt("Please enter a chat name");
 

@@ -2,7 +2,7 @@ import { Avatar } from "@mui/material";
 import React from "react";
 import "./Message.css";
 
-function Message({ id, content }) {
+function Message({ id, contents }) {
   return (
     <div className="message">
       <Avatar />

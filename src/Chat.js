@@ -1,19 +1,83 @@
 import { IconButton } from "@mui/material";
 import MicNoneIcon from "@mui/icons-material/MicNone";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Chat.css";
 import Message from "./Message";
 import { useSelector } from "react-redux";
-import { selectChatName } from "./features/chatSlice";
+import { selectChatId, selectChatName } from "./features/chatSlice";
+import { selectUser } from "./features/userSlice";
+// Database imports
+import firebase from "firebase/app";
+import db from "./firebase";
+import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
 
 function Chat() {
   const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
+  const user = useSelector(selectUser);
   const chatName = useSelector(selectChatName);
+  const chatId = useSelector(selectChatId);
+
+  // Collection Ref
+  // The chatId is coming from Redux and it's set in the SidebarChat comopnent (onClick)
+  const messageRef = collection(db, "chats", `${chatId}`, "messages");
+  console.log("these is my message", { messages });
+
+  // Getting Docs, no real-time updates
+  // useEffect(() => {
+  //   getDocs(messageRef).then((snapshot) => {
+  //     setMessages(
+  //       snapshot.docs.map((doc) => ({
+  //         data: doc.data(),
+  //         id: doc.id,
+  //       }))
+  //     );
+  //   });
+  // }, []);
+
+  // onSnapshot
+  useEffect(() => {
+    onSnapshot(messageRef, (snapshot) => {
+      setMessages(
+        snapshot.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }))
+      );
+    });
+  }, [chatId]);
+
+  console.log("rerendering 2");
+
+  // Firebase code before v9
+  // useEffect(() => {
+  //   if (chatId) {
+  //     db.collection("chats")
+  //       .doc(chatId)
+  //       .collection("messages")
+  //       .orderBy("timestamp", "desc")
+  //       .onSnapshot((snapshot) =>
+  //         setMessages(
+  //           snapshot.docs.map((doc) => ({
+  //             id: doc.id,
+  //             data: doc.data(),
+  //           }))
+  //         )
+  //       );
+  //   }
+  // }, [chatId]);
 
   const sendMessage = (e) => {
     e.preventDefault();
 
-    // Firebase
+    // db.collection("chats").doc(chatId).collection("messages").add({
+    //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    //   message: input,
+    //   uid: user.uid,
+    //   photo: user.photo,
+    //   email: user.email,
+    //   displayName: user.displayName,
+    // });
     setInput("");
   };
   return (
@@ -27,7 +91,9 @@ function Chat() {
       </div>
       {/* Chat messages */}
       <div className="chat__messages">
-        <Message />
+        {/* {messages?.map(({ id, data }) => {
+          <Message key={id} contents={data} />;
+        })} */}
       </div>
       {/* Chat input */}
       <div className="chat__input">

@@ -6,6 +6,7 @@ import { setChat } from "./features/chatSlice";
 
 function SidebarChat({ id, chatName }) {
   const dispatch = useDispatch();
+
   return (
     <div
       onClick={() =>
