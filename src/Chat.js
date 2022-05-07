@@ -7,9 +7,9 @@ import { useSelector } from "react-redux";
 import { selectChatId, selectChatName } from "./features/chatSlice";
 import { selectUser } from "./features/userSlice";
 // Database imports
-import firebase from "firebase/app";
 import db from "./firebase";
-import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
+import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import { query, orderBy, serverTimestamp } from "firebase/firestore";
 
 function Chat() {
   const [input, setInput] = useState("");
@@ -21,7 +21,7 @@ function Chat() {
   // Collection Ref
   // The chatId is coming from Redux and it's set in the SidebarChat comopnent (onClick)
   const messageRef = collection(db, "chats", `${chatId}`, "messages");
-  console.log("these is my message", { messages });
+  console.log("these are my messages", { messages });
 
   // Getting Docs, no real-time updates
   // useEffect(() => {
@@ -37,17 +37,18 @@ function Chat() {
 
   // onSnapshot
   useEffect(() => {
-    onSnapshot(messageRef, (snapshot) => {
-      setMessages(
-        snapshot.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }))
-      );
-    });
+    if (chatId) {
+      const q = query(messageRef, orderBy("timestamp", "desc"));
+      onSnapshot(q, (snapshot) => {
+        setMessages(
+          snapshot.docs.map((doc) => ({
+            data: doc.data(),
+            id: doc.id,
+          }))
+        );
+      });
+    }
   }, [chatId]);
-
-  console.log("rerendering 2");
 
   // Firebase code before v9
   // useEffect(() => {
@@ -78,6 +79,15 @@ function Chat() {
     //   email: user.email,
     //   displayName: user.displayName,
     // });
+    console.log("this is my input:", { input });
+    addDoc(messageRef, {
+      timestamp: serverTimestamp(),
+      message: input,
+      uid: user.uid,
+      photo: user.photo,
+      email: user.email,
+      displayName: user.displayName,
+    });
     setInput("");
   };
   return (
@@ -91,9 +101,9 @@ function Chat() {
       </div>
       {/* Chat messages */}
       <div className="chat__messages">
-        {/* {messages?.map(({ id, data }) => {
-          <Message key={id} contents={data} />;
-        })} */}
+        {messages.map(({ id, data }) => (
+          <Message key={id} contents={data} />
+        ))}
       </div>
       {/* Chat input */}
       <div className="chat__input">
