@@ -38,7 +38,7 @@ function Chat() {
   // onSnapshot
   useEffect(() => {
     if (chatId) {
-      const q = query(messageRef, orderBy("timestamp", "desc"));
+      const q = query(messageRef, orderBy("timestamp", "asc"));
       onSnapshot(q, (snapshot) => {
         setMessages(
           snapshot.docs.map((doc) => ({
