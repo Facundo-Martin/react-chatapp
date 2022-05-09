@@ -6,6 +6,7 @@ import Message from "./Message";
 import { useSelector } from "react-redux";
 import { selectChatId, selectChatName } from "./features/chatSlice";
 import { selectUser } from "./features/userSlice";
+import FlipMove from "react-flip-move";
 // Database imports
 import db from "./firebase";
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
@@ -100,9 +101,11 @@ function Chat() {
       </div>
       {/* Chat messages */}
       <div className="chat__messages">
-        {messages.map(({ id, data }) => (
-          <Message key={id} contents={data} />
-        ))}
+        <FlipMove>
+          {messages.map(({ id, data }) => (
+            <Message key={id} contents={data} />
+          ))}
+        </FlipMove>
       </div>
       {/* Chat input */}
       <div className="chat__input">

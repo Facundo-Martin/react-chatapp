@@ -7,6 +7,7 @@ import { setChat } from "./features/chatSlice";
 import db from "./firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { query, orderBy } from "firebase/firestore";
+import * as timeago from "timeago.js";
 
 function SidebarChat({ id, chatName }) {
   const dispatch = useDispatch();
@@ -39,10 +40,7 @@ function SidebarChat({ id, chatName }) {
         <p>{chatInfo[0]?.message}</p>
         <small>
           {chatInfo[0]
-            ? new Date(chatInfo[0].timestamp?.toDate()).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
+            ? timeago.format(new Date(chatInfo[0].timestamp?.toDate()))
             : "No Message"}
         </small>
       </div>
