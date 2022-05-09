@@ -21,7 +21,6 @@ function Chat() {
   // Collection Ref
   // The chatId is coming from Redux and it's set in the SidebarChat comopnent (onClick)
   const messageRef = collection(db, "chats", `${chatId}`, "messages");
-  console.log("these are my messages", { messages });
 
   // Getting Docs, no real-time updates
   // useEffect(() => {
